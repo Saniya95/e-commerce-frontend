@@ -1,325 +1,27 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import Layout from "../components/Layout";
-import { useToast } from "../contexts/ToastContext";
+import PaymentPageWithSuspense from "./PaymentPageWithSuspense";
 
-const paymentMethods = [
-  {
-    id: "cod",
-    name: "Cash on Delivery",
-    icon: "💵",
-    description: "Pay when you receive your order",
-    type: "offline",
-  },
-  {
-    id: "razorpay",
-    name: "Credit/Debit Card",
-    icon: "💳",
-    description: "Secure payment with Razorpay",
-    type: "online",
-  },
-  {
-    id: "upi",
-    name: "UPI Payment",
-    icon: "📱",
-    description: "GPay, PhonePe, Paytm & more",
-    type: "online",
-  },
-  {
-    id: "netbanking",
-    name: "Net Banking",
-    icon: "🏦",
-    description: "All major banks supported",
-    type: "online",
-  },
-];
-
-export default function PaymentPage() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const toast = useToast();
-  const [selected, setSelected] = useState("");
-  const [orderId, setOrderId] = useState("");
-  const [orderDetails, setOrderDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [processingPayment, setProcessingPayment] = useState(false);
-
-  // Load Razorpay script
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
-    const orderIdParam = searchParams.get("orderId");
-    if (!orderIdParam) {
-      setError("Order ID is missing. Please go back to checkout.");
-      setLoading(false);
-      return;
-    }
-
-    setOrderId(orderIdParam);
-
-    // Fetch order details from the backend
-  fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkout/order/${orderIdParam}`, {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch order details");
-        return res.json();
-      })
-      .then((data) => {
-        setOrderDetails(data.order);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching order:", err);
-        // Don't treat this as a fatal error - proceed with just the order ID
-        setOrderDetails({ id: orderIdParam, amount: 0 });
-        setLoading(false);
-      });
-  }, [searchParams]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!selected) {
-      toast.warning("⚠️ Please select a payment method");
-      return;
-    }
-
-    setProcessingPayment(true);
-
-    try {
-      // If COD, simply confirm the order
-      if (selected === "cod") {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/payment/cod/${orderId}`,
-          {
-            method: "POST",
-            credentials: "include",
-          }
-        );
-
-        let data;
-        try {
-          const responseText = await response.text();
-          if (responseText.trim()) {
-            data = JSON.parse(responseText);
-          } else {
-            data = { success: response.ok, message: "Payment processed" };
-          }
-        } catch (parseError) {
-          console.error("Error parsing response:", parseError);
-          data = { success: response.ok, message: "Payment processed" };
-        }
-
-        if (response.ok || data.success) {
-          router.push("/payment-success?orderId=" + orderId + "&method=cod");
-        } else {
-          toast.error(data.message || "💳 Payment failed");
-        }
-      } else {
-        // For online payments, create Razorpay order
-        console.log(
-          "Making payment request for method:",
-          selected,
-          "orderId:",
-          orderId
-        ); // Debug log
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/payment/create/${orderId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ method: selected }),
-            credentials: "include",
-          }
-        );
-
-        console.log(
-          "Response status:",
-          response.status,
-          "Response OK:",
-          response.ok
-        ); // Debug log
-
-        let data;
-        try {
-          const responseText = await response.text();
-          console.log("Backend response:", responseText); // Debug log
-          if (responseText.trim()) {
-            data = JSON.parse(responseText);
-            console.log("Parsed data:", data); // Debug log
-          } else {
-            throw new Error("Empty response from server");
-          }
-        } catch (parseError) {
-          console.error("Error parsing response:", parseError);
-          throw new Error("Invalid response from server");
-        }
-
-        console.log(
-          "Response OK:",
-          response.ok,
-          "Data success:",
-          data.success,
-          "Has razorpayOrder:",
-          !!data.razorpayOrder
-        ); // Debug log
-
-        if (response.ok && data.success && data.razorpayOrder) {
-          // Initialize Razorpay
-          const options = {
-            key: data.key, // Razorpay key from backend
-            amount: data.razorpayOrder.amount,
-            currency: data.razorpayOrder.currency,
-            name: "SCRATCH",
-            description: `Order #${orderId}`,
-            order_id: data.razorpayOrder.id,
-            handler: function (response) {
-              // Payment successful
-              verifyPayment(response);
-            },
-            prefill: {
-              name: orderDetails?.user?.name || "",
-              email: orderDetails?.user?.email || "",
-              contact: orderDetails?.user?.phone || "",
-            },
-            theme: {
-              color: "#8f6690",
-            },
-            modal: {
-              ondismiss: function () {
-                setProcessingPayment(false);
-              },
-            },
-          };
-
-          const razorpay = new window.Razorpay(options);
-          razorpay.open();
-        } else {
-          // Show specific error message from backend
-          const errorMessage = data.message || "Payment initiation failed";
-          console.error("Payment initiation failed:", errorMessage, data);
-
-          // If cart is empty, suggest going back to add items
-          if (errorMessage.includes("Cart is empty")) {
-            if (
-              confirm(
-                "Your cart appears to be empty. Would you like to go back to shopping?"
-              )
-            ) {
-              router.push("/");
-              return;
-            }
-          }
-
-          throw new Error(errorMessage);
-        }
-      }
-    } catch (error) {
-      console.error("Payment error:", error);
-      toast.error("💳 Payment failed. Please try again.");
-      setProcessingPayment(false);
-    }
-  };
-
-  const verifyPayment = async (razorpayResponse) => {
-    try {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payment/verify`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          orderId: orderId,
-          razorpay_payment_id: razorpayResponse.razorpay_payment_id,
-          razorpay_order_id: razorpayResponse.razorpay_order_id,
-          razorpay_signature: razorpayResponse.razorpay_signature,
-        }),
-        credentials: "include",
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        router.push(
-          `/payment-success?orderId=${orderId}&method=${selected}&paymentId=${razorpayResponse.razorpay_payment_id}`
-        );
-      } else {
-        toast.error("Payment verification failed. Please contact support.");
-      }
-    } catch (error) {
-      console.error("Payment verification error:", error);
-      toast.error("Payment verification failed. Please contact support.");
-    } finally {
-      setProcessingPayment(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-[#8f6690] to-[#b278a8] flex items-center justify-center">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8f6690] mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading order details...</p>
-            </div>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (error) {
-    return (
-      <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-[#8f6690] to-[#b278a8] flex items-center justify-center">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 text-center">
-            <div className="text-red-500 text-6xl mb-4">⚠️</div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Error</h2>
-            <p className="text-gray-600 mb-6">{error}</p>
-            <button
-              onClick={() => router.back()}
-              className="bg-[#8f6690] text-white px-6 py-3 rounded-full hover:bg-[#7a5579] transition-all duration-300 transform hover:scale-105"
-            >
-              Go Back
-            </button>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
+export default function Page() {
+  return <PaymentPageWithSuspense />;
+}
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-br from-[#8f6690] to-[#b278a8] py-8 px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-white mb-2">
+          <div className="mb-8 text-center">
+            <h1 className="mb-2 text-4xl font-bold text-white">
               💳 Secure Payment
             </h1>
-            <p className="text-white/80 text-lg">
+            <p className="text-lg text-white/80">
               Choose your preferred payment method
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid gap-8 lg:grid-cols-3">
             {/* Order Summary */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-2xl p-6 sticky top-8">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <div className="sticky p-6 bg-white shadow-2xl rounded-2xl top-8">
+                <h3 className="flex items-center mb-4 text-xl font-bold text-gray-800">
                   � Order Summary
                 </h3>
                 <div className="space-y-3">
@@ -335,8 +37,8 @@ export default function PaymentPage() {
                       </span>
                     </div>
                   )}
-                  <div className="border-t pt-3">
-                    <div className="flex justify-between font-bold text-lg">
+                  <div className="pt-3 border-t">
+                    <div className="flex justify-between text-lg font-bold">
                       <span>Total:</span>
                       <span className="text-[#8f6690]">
                         ₹{orderDetails?.amount || 0}
@@ -349,7 +51,7 @@ export default function PaymentPage() {
 
             {/* Payment Methods */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl shadow-2xl p-8">
+              <div className="p-8 bg-white shadow-2xl rounded-2xl">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid gap-4">
                     {paymentMethods.map((method) => (
@@ -380,10 +82,10 @@ export default function PaymentPage() {
                           <div className="flex items-center space-x-4">
                             <div className="text-3xl">{method.icon}</div>
                             <div className="flex-1">
-                              <h4 className="font-bold text-gray-800 text-lg">
+                              <h4 className="text-lg font-bold text-gray-800">
                                 {method.name}
                               </h4>
-                              <p className="text-gray-600 text-sm">
+                              <p className="text-sm text-gray-600">
                                 {method.description}
                               </p>
                             </div>
@@ -416,7 +118,7 @@ export default function PaymentPage() {
                     >
                       {processingPayment ? (
                         <div className="flex items-center justify-center space-x-3">
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          <div className="w-5 h-5 border-b-2 border-white rounded-full animate-spin"></div>
                           <span>Processing...</span>
                         </div>
                       ) : (
@@ -432,7 +134,7 @@ export default function PaymentPage() {
                     </button>
                   </div>
 
-                  <div className="text-center text-sm text-gray-500 pt-4">
+                  <div className="pt-4 text-sm text-center text-gray-500">
                     <p className="flex items-center justify-center space-x-2">
                       <span>🔐</span>
                       <span>
@@ -448,4 +150,4 @@ export default function PaymentPage() {
       </div>
     </Layout>
   );
-}
+
