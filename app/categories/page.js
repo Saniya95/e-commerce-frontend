@@ -11,14 +11,14 @@ import { getCategoryImage, getCategoryAlt } from "../utils/categoryImages";
 const fallbackCategories = [
   {
     slug: "womens-fashion",
-    name: "Women's Fashion",
+    name: "Women&apos;s Fashion",
     description: "Trendy and elegant dresses, tops, and ethnic wear.",
     imageUrl:
       "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&h=600&fit=crop&crop=face",
   },
   {
     slug: "mens-fashion",
-    name: "Men's Fashion",
+    name: "Men&apos;s Fashion",
     description: "Contemporary styles for men.",
     imageUrl:
       "https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=800&h=600&fit=crop&crop=center",
@@ -152,7 +152,7 @@ export default function CategoriesPage() {
       }));
     });
 
-    fetch("http://localhost:5000/api/categories")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`)
       .then((res) => res.json())
       .then((data) => {
         if (data.categories && data.categories.length > 0) {

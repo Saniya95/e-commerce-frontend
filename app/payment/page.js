@@ -68,7 +68,7 @@ export default function PaymentPage() {
     setOrderId(orderIdParam);
 
     // Fetch order details from the backend
-    fetch(`http://localhost:5000/api/checkout/order/${orderIdParam}`, {
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkout/order/${orderIdParam}`, {
       credentials: "include",
     })
       .then((res) => {
@@ -100,7 +100,7 @@ export default function PaymentPage() {
       // If COD, simply confirm the order
       if (selected === "cod") {
         const response = await fetch(
-          `http://localhost:5000/api/payment/cod/${orderId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/payment/cod/${orderId}`,
           {
             method: "POST",
             credentials: "include",
@@ -134,7 +134,7 @@ export default function PaymentPage() {
           orderId
         ); // Debug log
         const response = await fetch(
-          `http://localhost:5000/api/payment/create/${orderId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/payment/create/${orderId}`,
           {
             method: "POST",
             headers: {
@@ -235,7 +235,7 @@ export default function PaymentPage() {
 
   const verifyPayment = async (razorpayResponse) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/payment/verify`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payment/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

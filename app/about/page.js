@@ -22,14 +22,14 @@ const team = [
 export default function AboutPage() {
   return (
     <Layout>
-      <section className="min-h-screen flex items-center justify-center relative overflow-hidden py-16 px-4">
+      <section className="relative flex items-center justify-center min-h-screen px-4 py-16 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[#8D7DFA] opacity-10 blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-[#C9BBF7] opacity-10 blur-3xl"></div>
         </div>
-        <div className="relative z-10 max-w-3xl w-full mx-auto">
+        <div className="relative z-10 w-full max-w-3xl mx-auto">
           <div className="backdrop-blur-xl bg-[#7c527c]/60 border border-white/10 rounded-3xl shadow-xl p-10">
-            <div className="text-center mb-10">
+            <div className="mb-10 text-center">
               <h1 className="mb-4">About SCRATCH</h1>
               <p className="text-[#C9BBF7] text-lg mb-6">
                 Welcome to{" "}
@@ -45,10 +45,10 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="mb-10">
-              <h2 className="text-2xl font-bold text-white mb-6 text-center">
+              <h2 className="mb-6 text-2xl font-bold text-center text-white">
                 Meet Our Team
               </h2>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+              <div className="flex flex-col items-center justify-center gap-8 sm:flex-row">
                 {team.map((member) => (
                   <div key={member.name} className="flex flex-col items-center">
                     <img
@@ -56,7 +56,7 @@ export default function AboutPage() {
                       alt={member.name}
                       className="w-24 h-24 rounded-full shadow-lg mb-2 border-4 border-[#8D7DFA]"
                     />
-                    <div className="text-white font-semibold">
+                    <div className="font-semibold text-white">
                       {member.name}
                     </div>
                     <div className="text-[#C9BBF7] text-sm">{member.role}</div>
@@ -65,7 +65,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="text-center">
-              <h2 className="text-2xl font-bold text-white mb-4">
+              <h2 className="mb-4 text-2xl font-bold text-white">
                 Our Cosmic Promise
               </h2>
               <p className="text-[#C9BBF7] max-w-xl mx-auto mb-4">

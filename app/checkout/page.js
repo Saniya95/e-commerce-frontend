@@ -35,7 +35,7 @@ export default function CheckoutPage() {
     }
 
     // Fetch user's saved addresses
-    fetch("http://localhost:5000/api/checkout/addresses", {
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkout/addresses`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/checkout/address",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/checkout/address`,
         {
           method: "POST",
           headers: {
@@ -158,7 +158,7 @@ export default function CheckoutPage() {
         ) + 50;
 
       const response = await fetch(
-        "http://localhost:5000/api/checkout/create-order",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/checkout/create-order`,
         {
           method: "POST",
           headers: {

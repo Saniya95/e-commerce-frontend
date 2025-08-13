@@ -24,7 +24,7 @@ export default function ManageCategories() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/categories");
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`);
       const data = await response.json();
       if (data.categories) {
         setCategories(data.categories);
@@ -76,7 +76,7 @@ export default function ManageCategories() {
         formData.append("categoryImage", selectedImage);
       }
 
-      let url = "http://localhost:5000/api/categories";
+  let url = `${process.env.NEXT_PUBLIC_API_URL}/api/categories`;
       let method = "POST";
 
       // If editing, use PUT request

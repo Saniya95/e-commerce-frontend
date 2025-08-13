@@ -171,7 +171,7 @@ const ImageUploadModal = ({
 
       // Update category image via API
       const response = await fetch(
-        `http://localhost:5000/api/admin/categories/${categorySlug}/image`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories/${categorySlug}/image`,
         {
           method: "PUT",
           headers: {
@@ -193,7 +193,7 @@ const ImageUploadModal = ({
           );
         } else if (response.status === 403) {
           throw new Error(
-            "You don't have permission to update category images."
+            "You don&apos;t have permission to update category images."
           );
         }
         throw new Error(`Failed to update category image (${response.status})`);

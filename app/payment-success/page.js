@@ -100,7 +100,7 @@ export default function PaymentSuccessPage() {
               🎉 Payment Successful!
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Thank you for your order. We're processing it now!
+              Thank you for your order. We&apos;re processing it now!
             </p>
 
             {/* Order Details Card */}

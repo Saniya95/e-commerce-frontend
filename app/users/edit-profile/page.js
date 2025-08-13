@@ -60,7 +60,7 @@ export default function EditProfilePage() {
       }
 
       const response = await fetch(
-        "http://localhost:5000/api/users/update-profile",
+  `${process.env.NEXT_PUBLIC_API_URL}/api/users/update-profile`,
         {
           method: "POST",
           credentials: "include",

@@ -6,14 +6,14 @@ export const categoryImageConfig = {
       "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=400&fit=crop&crop=face",
     fallback:
       "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=400&fit=crop&crop=center",
-    alt: "Women's Fashion",
+    alt: "Women&apos;s Fashion",
   },
   "mens-fashion": {
     primary:
       "https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=400&h=400&fit=crop&crop=center",
     fallback:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-    alt: "Men's Fashion",
+    alt: "Men&apos;s Fashion",
   },
 
   // Accessories

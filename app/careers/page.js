@@ -15,9 +15,9 @@ export default function Careers() {
                 Join the <span className="text-[#8D7DFA]">SCRATCH</span> Team
               </h1>
               <p className="text-xl text-[#C9BBF7] max-w-2xl mx-auto">
-                Be part of our innovative e-commerce journey. We're looking for
-                passionate individuals who want to shape the future of online
-                fashion retail.
+                Be part of our innovative e-commerce journey. We&apos;re looking
+                for passionate individuals who want to shape the future of
+                online fashion retail.
               </p>
             </div>
 

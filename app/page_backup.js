@@ -38,7 +38,7 @@ export default function Home() {
           price: 2499,
           discount: 15,
           description: "Perfect for summer outings",
-          category: "Women's Clothing",
+          category: "Women&apos;s Clothing",
           image:
             "https://i.pinimg.com/736x/98/b2/93/98b2939c723b0dd7284e63378bb65ee6.jpg",
         },
@@ -48,7 +48,7 @@ export default function Home() {
           price: 3299,
           discount: 10,
           description: "Timeless style for all seasons",
-          category: "Men's Fashion",
+          category: "Men&apos;s Fashion",
           image:
             "https://i.pinimg.com/736x/82/48/ab/8248abc28ceab53fecca5d00b1f7986e.jpg",
         },
@@ -269,7 +269,7 @@ export default function Home() {
                     </span>
                   </div>
                   <h3 className="mb-2 text-xl font-bold text-white">
-                    Women's Fashion
+                    Women&apos;s Fashion
                   </h3>
                   <p className="text-[#C9BBF7] text-sm">
                     Elegant styles for every occasion
@@ -290,7 +290,7 @@ export default function Home() {
                     </span>
                   </div>
                   <h3 className="mb-2 text-xl font-bold text-white">
-                    Men's Collection
+                    Men&apos;s Collection
                   </h3>
                   <p className="text-[#C9BBF7] text-sm">
                     Contemporary styles for men

@@ -24,7 +24,7 @@ export default function ProductsPage() {
       price: 2499,
       discount: 15,
       description: "Perfect for summer outings",
-      category: { name: "Women's Fashion", slug: "womens-fashion" },
+      category: { name: "Women&apos;s Fashion", slug: "womens-fashion" },
       imageUrl:
         "https://i.pinimg.com/736x/98/b2/93/98b2939c723b0dd7284e63378bb65ee6.jpg",
     },
@@ -34,7 +34,7 @@ export default function ProductsPage() {
       price: 3299,
       discount: 10,
       description: "Timeless style for all seasons",
-      category: { name: "Men's Fashion", slug: "mens-fashion" },
+      category: { name: "Men&apos;s Fashion", slug: "mens-fashion" },
       imageUrl:
         "https://i.pinimg.com/736x/82/48/ab/8248abc28ceab53fecca5d00b1f7986e.jpg",
     },
@@ -81,8 +81,8 @@ export default function ProductsPage() {
   ];
 
   const fallbackCategories = [
-    { name: "Women's Fashion", slug: "womens-fashion" },
-    { name: "Men's Fashion", slug: "mens-fashion" },
+    { name: "Women&apos;s Fashion", slug: "womens-fashion" },
+    { name: "Men&apos;s Fashion", slug: "mens-fashion" },
     { name: "Accessories", slug: "accessories" },
     { name: "Footwear", slug: "footwear" },
     { name: "Electronics", slug: "electronics" },
@@ -91,10 +91,10 @@ export default function ProductsPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch("http://localhost:5000/api/products")
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`)
         .then((res) => res.json())
         .catch(() => ({ products: [] })),
-      fetch("http://localhost:5000/api/categories")
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`)
         .then((res) => res.json())
         .catch(() => ({ categories: [] })),
     ])
@@ -355,7 +355,7 @@ export default function ProductsPage() {
                   No Products Found
                 </h3>
                 <p className="text-[#C9BBF7] mb-6">
-                  We couldn't find any products matching your criteria. Try
+                  We couldn&apos;t find any products matching your criteria. Try
                   adjusting your filters.
                 </p>
                 <button
@@ -383,7 +383,7 @@ export default function ProductsPage() {
         <div className="relative z-10 max-w-4xl mx-auto px-4">
           <div className="backdrop-blur-xl bg-[#7c527c]/60 border border-white/10 rounded-3xl shadow-xl p-10 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Can't Find What You're Looking For?
+              Can&apos;t Find What You&apos;re Looking For?
             </h2>
             <p className="text-lg text-[#C9BBF7] mb-8 max-w-2xl mx-auto">
               Explore our organized categories or contact our stellar support

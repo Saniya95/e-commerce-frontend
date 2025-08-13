@@ -61,7 +61,7 @@ export default function ProductsByCategoryPage() {
       try {
         // First try the products API route
         const res = await fetch(
-          `http://localhost:5000/api/products/category/${category}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/products/category/${category}`
         );
         const data = await res.json();
         setProducts(data.products || []);
@@ -70,7 +70,7 @@ export default function ProductsByCategoryPage() {
         try {
           // If that fails, try the categories API route
           const res = await fetch(
-            `http://localhost:5000/api/categories/${category}`
+            `${process.env.NEXT_PUBLIC_API_URL}/api/categories/${category}`
           );
           const data = await res.json();
           setProducts(data.products || []);

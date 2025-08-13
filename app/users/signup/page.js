@@ -114,34 +114,39 @@ export default function SignupPage() {
     }
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/users/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullname: form.fullname,
-          email: form.email,
-          contact: form.phone,
-          location: {
-            address: location.address?.formatted || location.fullAddress || "",
-            coordinates: location.coordinates
-              ? {
-                  latitude:
-                    location.coordinates.lat || location.coordinates.latitude,
-                  longitude:
-                    location.coordinates.lng || location.coordinates.longitude,
-                }
-              : null,
-            city: location.address?.city || location.city || "",
-            state: location.address?.state || location.state || "",
-            country: location.address?.country || location.country || "",
-            zipCode:
-              location.address?.zip || location.zipCode || location.zip || "",
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-          password: form.password,
-        }),
-      });
+          body: JSON.stringify({
+            fullname: form.fullname,
+            email: form.email,
+            contact: form.phone,
+            location: {
+              address:
+                location.address?.formatted || location.fullAddress || "",
+              coordinates: location.coordinates
+                ? {
+                    latitude:
+                      location.coordinates.lat || location.coordinates.latitude,
+                    longitude:
+                      location.coordinates.lng ||
+                      location.coordinates.longitude,
+                  }
+                : null,
+              city: location.address?.city || location.city || "",
+              state: location.address?.state || location.state || "",
+              country: location.address?.country || location.country || "",
+              zipCode:
+                location.address?.zip || location.zipCode || location.zip || "",
+            },
+            password: form.password,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -623,7 +628,7 @@ export default function SignupPage() {
                     </h3>
                     <p className="text-sm leading-relaxed">
                       SCRATCH is committed to providing high-quality fashion and
-                      lifestyle products. If you're not satisfied with your
+                      lifestyle products. If you&apos;re not satisfied with your
                       purchase, contact our customer service team for
                       assistance.
                     </p>
@@ -639,8 +644,8 @@ export default function SignupPage() {
                       Limitation of Liability
                     </h3>
                     <p className="text-sm leading-relaxed">
-                      SCRATCH's liability is limited to the purchase price of
-                      the product. We are not responsible for any indirect,
+                      SCRATCH&apos;s liability is limited to the purchase price
+                      of the product. We are not responsible for any indirect,
                       incidental, or consequential damages arising from product
                       use.
                     </p>

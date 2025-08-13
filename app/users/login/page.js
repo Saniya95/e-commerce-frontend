@@ -22,14 +22,17 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-        credentials: "include", // Important for cookies
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+          credentials: "include", // Important for cookies
+        }
+      );
 
       const data = await response.json();
 
@@ -142,7 +145,7 @@ export default function LoginPage() {
               </Link>
             </p>
             <p className="mt-4 text-center text-sm text-[#C9BBF7]">
-              Don't have an account?
+              Don&apos;t have an account?
               <Link
                 href="/users/signup"
                 className="text-[#8D7DFA] hover:underline font-semibold ml-1"
