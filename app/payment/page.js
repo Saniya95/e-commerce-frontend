@@ -3,6 +3,11 @@ import PaymentPageWithSuspense from "./PaymentPageWithSuspense";
 export default function Page() {
   return <PaymentPageWithSuspense />;
 }
+import PaymentPageWithSuspense from "./PaymentPageWithSuspense";
+
+export default function Page() {
+  return <PaymentPageWithSuspense />;
+}
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-br from-[#8f6690] to-[#b278a8] py-8 px-4">
