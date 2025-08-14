@@ -160,18 +160,21 @@ export default function SignupPage() {
             email: form.email,
             password: form.password,
           });
-
-          if (loginResult.success) {
-            toast.success("🚀 Redirecting to your dashboard...");
-            setTimeout(() => {
-              router.push("/"); // Redirect to home page instead of login
-            }, 1500);
+          if (loginResult && typeof loginResult.success !== "undefined") {
+            if (loginResult.success) {
+              toast.success("🚀 Redirecting to your dashboard...");
+              setTimeout(() => {
+                router.push("/"); // Redirect to home page instead of login
+              }, 1500);
+            } else {
+              // If auto-login fails, redirect to login page
+              toast.warning("Please login with your new credentials");
+              setTimeout(() => {
+                router.push("/users/login");
+              }, 2000);
+            }
           } else {
-            // If auto-login fails, redirect to login page
-            toast.warning("Please login with your new credentials");
-            setTimeout(() => {
-              router.push("/users/login");
-            }, 2000);
+            throw new Error("Unexpected response from server after signup. Please try again.");
           }
         } catch (loginError) {
           console.error("Auto-login error:", loginError);
@@ -193,6 +196,7 @@ export default function SignupPage() {
 
   return (
     <Layout>
+                       
       <div id="recaptcha-container"></div>
       <section className="relative flex items-center justify-center min-h-screen px-4 py-16 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
@@ -297,7 +301,7 @@ export default function SignupPage() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  className="input w-full"
+                  className="w-full input"
                   value={form.password}
                   onChange={handleChange}
                   required
@@ -305,14 +309,14 @@ export default function SignupPage() {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
+                  className="absolute text-gray-400 transform -translate-y-1/2 right-3 top-1/2 hover:text-white focus:outline-none"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -326,7 +330,7 @@ export default function SignupPage() {
                   ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -362,7 +366,7 @@ export default function SignupPage() {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
+                  className="absolute text-gray-400 transform -translate-y-1/2 right-3 top-1/2 hover:text-white focus:outline-none"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   aria-label={
                     showConfirmPassword
@@ -373,7 +377,7 @@ export default function SignupPage() {
                   {showConfirmPassword ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -387,7 +391,7 @@ export default function SignupPage() {
                   ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -402,11 +406,11 @@ export default function SignupPage() {
                 </button>
                 {/* Password match indicator */}
                 {form.confirmPassword && (
-                  <div className="absolute right-12 top-1/2 transform -translate-y-1/2">
+                  <div className="absolute transform -translate-y-1/2 right-12 top-1/2">
                     {form.password === form.confirmPassword ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-green-500"
+                        className="w-5 h-5 text-green-500"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
@@ -419,7 +423,7 @@ export default function SignupPage() {
                     ) : (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-red-500"
+                        className="w-5 h-5 text-red-500"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
@@ -484,17 +488,17 @@ export default function SignupPage() {
 
       {/* Terms and Conditions Modal */}
       {showTermsModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
           <div className="glass-card max-w-4xl max-h-[80vh] overflow-y-auto p-8 relative">
             <button
               onClick={() => setShowTermsModal(false)}
-              className="absolute top-4 right-4 text-white/70 hover:text-white text-2xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
+              className="absolute flex items-center justify-center w-8 h-8 text-2xl transition-colors rounded-full top-4 right-4 text-white/70 hover:text-white hover:bg-white/10"
             >
               ×
             </button>
 
             <div className="pr-8">
-              <h2 className="text-3xl font-bold text-white mb-6 text-center">
+              <h2 className="mb-6 text-3xl font-bold text-center text-white">
                 SCRATCH Terms and Conditions
               </h2>
 
@@ -504,7 +508,7 @@ export default function SignupPage() {
                     1
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Account Responsibility
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -521,7 +525,7 @@ export default function SignupPage() {
                     2
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Product Information
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -538,7 +542,7 @@ export default function SignupPage() {
                     3
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Payment Terms
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -555,7 +559,7 @@ export default function SignupPage() {
                     4
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Shipping and Delivery
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -572,7 +576,7 @@ export default function SignupPage() {
                     5
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Return and Refund Policy
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -589,7 +593,7 @@ export default function SignupPage() {
                     6
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Privacy Protection
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -606,7 +610,7 @@ export default function SignupPage() {
                     7
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Prohibited Activities
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -623,7 +627,7 @@ export default function SignupPage() {
                     8
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Quality Guarantee
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -640,7 +644,7 @@ export default function SignupPage() {
                     9
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Limitation of Liability
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -657,7 +661,7 @@ export default function SignupPage() {
                     10
                   </span>
                   <div>
-                    <h3 className="font-semibold text-white mb-2">
+                    <h3 className="mb-2 font-semibold text-white">
                       Terms Modification
                     </h3>
                     <p className="text-sm leading-relaxed">
@@ -676,7 +680,7 @@ export default function SignupPage() {
                     setAcceptedTerms(true);
                     setShowTermsModal(false);
                   }}
-                  className="btn btn-primary mr-4"
+                  className="mr-4 btn btn-primary"
                 >
                   Accept Terms
                 </button>
