@@ -7,6 +7,9 @@ import Loader from "../../components/Loader";
 import { useAuth } from "../../contexts/AuthContext";
 import { useToast } from "../../contexts/ToastContext";
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function ProductDetail() {
   const params = useParams();
   const router = useRouter();
@@ -82,7 +85,7 @@ export default function ProductDetail() {
         /* 
         // Temporarily commented out API call
         const response = await fetch(
-          `http://localhost:5000/api/products/id/${productId}`
+          `https://e-commerce-backend-1-if2s.onrender.com/api/products/id/${productId}`
         );
 
         console.log("API Response status:", response.status);
@@ -182,7 +185,7 @@ export default function ProductDetail() {
                       ? product.images[selectedImage].startsWith("http")
                         ? product.images[selectedImage]
                         : `${process.env.NEXT_PUBLIC_API_URL}${product.images[selectedImage]}`
-                      : "http://localhost:5000/placeholder-product.jpg"
+                      : "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg"
                   }
                   alt={product.name}
                   className="object-cover w-full h-full"
@@ -207,7 +210,7 @@ export default function ProductDetail() {
                           image?.startsWith("http")
                             ? image
                             : `${process.env.NEXT_PUBLIC_API_URL}${image}` ||
-                              "http://localhost:5000/placeholder-product.jpg"
+                              "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg"
                         }
                         alt={`${product.name} ${index + 1}`}
                         className="object-cover w-full h-full"

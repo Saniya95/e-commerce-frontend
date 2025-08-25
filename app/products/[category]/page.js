@@ -6,6 +6,9 @@ import ProductCard from "../../components/ProductCard";
 import { useAuth } from "../../contexts/AuthContext";
 import { useToast } from "../../contexts/ToastContext";
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function ProductsByCategoryPage() {
   const params = useParams();
   const category = params?.category;
@@ -21,7 +24,7 @@ export default function ProductsByCategoryPage() {
       name: "Stylish T-Shirt",
       price: 999,
       discount: 10,
-      image: "http://localhost:5000/placeholder-product.jpg",
+      image: "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg",
       category: "Fashion",
       description: "Comfortable and stylish t-shirt for everyday wear",
     },
@@ -30,7 +33,7 @@ export default function ProductsByCategoryPage() {
       name: "Designer Jeans",
       price: 2499,
       discount: 15,
-      image: "http://localhost:5000/placeholder-product.jpg",
+      image: "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg",
       category: "Fashion",
       description: "Premium quality denim jeans",
     },
@@ -39,7 +42,7 @@ export default function ProductsByCategoryPage() {
       name: "Casual Shoes",
       price: 1999,
       discount: 20,
-      image: "http://localhost:5000/placeholder-product.jpg",
+      image: "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg",
       category: "Footwear",
       description: "Comfortable casual shoes for daily use",
     },
@@ -52,7 +55,7 @@ export default function ProductsByCategoryPage() {
     if (imageUrl && !imageUrl.startsWith("http")) {
       imageUrl = `${process.env.NEXT_PUBLIC_API_URL}${imageUrl}`;
     } else if (!imageUrl) {
-      imageUrl = "http://localhost:5000/placeholder-product.jpg";
+      imageUrl = "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg";
     }
 
     return {

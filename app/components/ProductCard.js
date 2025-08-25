@@ -46,7 +46,7 @@ export default function ProductCard({ product, onAddToCart }) {
               image?.startsWith("http")
                 ? image
                 : `${process.env.NEXT_PUBLIC_API_URL}${image}` ||
-                  "http://localhost:5000/placeholder-product.jpg"
+                  "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg"
             }
             alt={name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

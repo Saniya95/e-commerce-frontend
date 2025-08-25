@@ -687,7 +687,7 @@ export default function CheckoutPage() {
                           <img
                             src={
                               item.product.image ||
-                              "http://localhost:5000/placeholder-product.jpg"
+                              "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg"
                             }
                             alt={item.product.name}
                             className="object-cover w-16 h-16 mr-4 rounded-lg"

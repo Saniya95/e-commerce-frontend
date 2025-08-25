@@ -1,11 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Layout from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 
-export default function PaymentPage() {
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
+function PaymentPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
@@ -218,5 +221,26 @@ export default function PaymentPage() {
         </div>
       </div>
     </Layout>
+  );
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense
+      fallback={
+        <Layout>
+          <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-12">
+            <div className="max-w-4xl mx-auto px-4">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
+                <p className="text-white mt-4">Loading payment page...</p>
+              </div>
+            </div>
+          </div>
+        </Layout>
+      }
+    >
+      <PaymentPageContent />
+    </Suspense>
   );
 }

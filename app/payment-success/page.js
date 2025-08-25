@@ -1,8 +1,11 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function PaymentSuccessRedirect() {
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
+function PaymentSuccessRedirectContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -23,5 +26,19 @@ export default function PaymentSuccessRedirect() {
     <div className="min-h-screen bg-gradient-to-br from-[#2a1a2e] via-[#3d1a2e] to-[#1a0f1f] flex items-center justify-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff6b9d]"></div>
     </div>
+  );
+}
+
+export default function PaymentSuccessRedirect() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-[#2a1a2e] via-[#3d1a2e] to-[#1a0f1f] flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff6b9d]"></div>
+        </div>
+      }
+    >
+      <PaymentSuccessRedirectContent />
+    </Suspense>
   );
 }

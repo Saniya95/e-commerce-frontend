@@ -1,10 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Layout from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 
-export default function OrderSuccessPage() {
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
+function OrderSuccessPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
@@ -137,5 +140,24 @@ export default function OrderSuccessPage() {
         </div>
       </div>
     </Layout>
+  );
+}
+
+export default function OrderSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <Layout>
+          <div className="min-h-screen bg-gradient-to-br from-[#2a1a2e] via-[#3d1a2e] to-[#1a0f1f] flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff6b9d] mx-auto"></div>
+              <p className="text-white mt-4">Loading...</p>
+            </div>
+          </div>
+        </Layout>
+      }
+    >
+      <OrderSuccessPageContent />
+    </Suspense>
   );
 }
