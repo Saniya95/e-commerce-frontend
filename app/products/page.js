@@ -25,7 +25,8 @@ export default function ProductsPage() {
       discount: 15,
       description: "Perfect for summer outings",
       category: { name: "Women&apos;s Fashion", slug: "womens-fashion" },
-      imageUrl: "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg",
+      imageUrl:
+        "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg",
     },
     {
       _id: "fallback-2",
@@ -34,7 +35,8 @@ export default function ProductsPage() {
       discount: 10,
       description: "Timeless style for all seasons",
       category: { name: "Men&apos;s Fashion", slug: "mens-fashion" },
-      imageUrl: "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg",
+      imageUrl:
+        "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg",
     },
     {
       _id: "fallback-3",
@@ -43,7 +45,8 @@ export default function ProductsPage() {
       discount: 5,
       description: "Elegant accessory for any occasion",
       category: { name: "Accessories", slug: "accessories" },
-      imageUrl: "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg",
+      imageUrl:
+        "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg",
     },
     {
       _id: "fallback-4",
@@ -93,7 +96,8 @@ export default function ProductsPage() {
     if (imageUrl && !imageUrl.startsWith("http")) {
       imageUrl = `${process.env.NEXT_PUBLIC_API_URL}${imageUrl}`;
     } else if (!imageUrl) {
-      imageUrl = "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg";
+      imageUrl =
+        "https://e-commerce-backend-1-if2s.onrender.com/placeholder-product.jpg";
     }
 
     return {

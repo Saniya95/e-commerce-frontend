@@ -5,7 +5,7 @@ import Layout from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 
 // Force dynamic rendering
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 function OrderSuccessPageContent() {
   const router = useRouter();
