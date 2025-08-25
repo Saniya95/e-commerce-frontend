@@ -55,7 +55,7 @@ export default function ProductDetail() {
           },
           images: [
             "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            "https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80"
+            "https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
           ],
           rating: 4.5,
           reviews: [
@@ -215,8 +215,8 @@ export default function ProductDetail() {
                     </button>
                   ))
                 ) : (
-                  <div className="w-20 h-20 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
-                    <span className="text-gray-400 text-xs">No images</span>
+                  <div className="flex items-center justify-center w-20 h-20 border rounded-lg bg-white/10 border-white/20">
+                    <span className="text-xs text-gray-400">No images</span>
                   </div>
                 )}
               </div>
