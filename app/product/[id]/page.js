@@ -53,7 +53,10 @@ export default function ProductDetail() {
             Care: "Machine wash cold, tumble dry low",
             Origin: "Made in India",
           },
-          images: ["http://localhost:5000/placeholder-product.jpg"],
+          images: [
+            "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+            "https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80"
+          ],
           rating: 4.5,
           reviews: [
             {
@@ -74,6 +77,7 @@ export default function ProductDetail() {
         };
         console.log("Setting sample product:", sampleProduct);
         setProduct(sampleProduct);
+        setLoading(false);
 
         /* 
         // Temporarily commented out API call
@@ -99,44 +103,6 @@ export default function ProductDetail() {
         */
       } catch (error) {
         console.error("Error fetching product:", error);
-        // Fallback to sample data with proper image URL
-        console.log("Using fallback sample data due to error");
-        const sampleProduct = {
-          _id: productId,
-          name: "Premium Fashion Item",
-          price: 2999,
-          discount: 20,
-          category: "Fashion",
-          description:
-            "Experience luxury and comfort with this premium fashion item. Crafted with the finest materials and attention to detail.",
-          specifications: {
-            Material: "100% Premium Cotton",
-            Size: "Available in S, M, L, XL",
-            Color: "Multiple colors available",
-            Care: "Machine wash cold, tumble dry low",
-            Origin: "Made in India",
-          },
-          images: ["http://localhost:5000/placeholder-product.jpg"],
-          rating: 4.5,
-          reviews: [
-            {
-              id: 1,
-              user: "John Doe",
-              rating: 5,
-              comment: "Excellent quality and fast delivery!",
-              date: "2024-01-15",
-            },
-            {
-              id: 2,
-              user: "Jane Smith",
-              rating: 4,
-              comment: "Great product, fits perfectly.",
-              date: "2024-01-10",
-            },
-          ],
-        };
-        setProduct(sampleProduct);
-      } finally {
         setLoading(false);
       }
     };
